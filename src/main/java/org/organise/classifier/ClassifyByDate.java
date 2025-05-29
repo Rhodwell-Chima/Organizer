@@ -2,7 +2,7 @@ package org.organise.classifier;
 
 import java.nio.file.Path;
 
-public class SizeClassifier implements ClassifyFile {
+public class ClassifyByDate implements ClassifyFile {
     @Override
     public String classify(Path file) {
         return "";
