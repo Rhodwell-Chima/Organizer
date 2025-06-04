@@ -16,14 +16,16 @@ public class ExtensionLookUp {
     }
 
     public String getExtensionCategory(String extension) {
-        for (String group : extensionCategories.keySet()) {
-            JsonArray extensionsArray = extensionCategories.getAsJsonArray(group);
-            // Convert the extension to a JsonElement
-            JsonPrimitive extensionElement = new JsonPrimitive(extension);
-            if (extensionsArray.contains(extensionElement)) {
-                return group;
-            }
+        for (String category : extensionCategories.keySet()) {
+            if (isExtensionInCategory(extension, category)) return category;
         }
         return null;
+    }
+
+    private boolean isExtensionInCategory(String extension, String group) {
+        JsonArray extensionsArray = extensionCategories.getAsJsonArray(group);
+        // Convert the extension to a JsonElement
+        JsonPrimitive extensionElement = new JsonPrimitive(extension);
+        return extensionsArray.contains(extensionElement);
     }
 }
