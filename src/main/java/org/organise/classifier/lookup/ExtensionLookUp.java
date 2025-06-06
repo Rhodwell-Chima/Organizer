@@ -3,28 +3,39 @@ package org.organise.classifier.lookup;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.organise.configuration.ConfigurationLoader;
-
-import java.nio.file.Path;
 
 public class ExtensionLookUp {
     private final JsonObject extensionCategories;
 
-    public ExtensionLookUp(Path configFilePath) {
-        ConfigurationLoader configurationLoader = ConfigurationLoader.getInstance(configFilePath);
-        this.extensionCategories = configurationLoader.getJsonConfigurationObject();
+    public ExtensionLookUp(JsonObject extensionCategories) {
+        if (extensionCategories == null) {
+            throw new IllegalArgumentException("Extension categories cannot be null");
+        }
+        this.extensionCategories = extensionCategories;
     }
 
     public String getExtensionCategory(String extension) {
-        for (String category : extensionCategories.keySet()) {
-            if (isExtensionInCategory(extension, category)) return category;
+        if (extension == null || extension.isEmpty()) {
+            throw new IllegalArgumentException("Extension cannot be null or empty");
         }
-        return null;
+
+        for (String category : extensionCategories.keySet()) {
+            try {
+                if (isExtensionInCategory(extension, category)) {
+                    return category;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return "Unknown";
     }
 
     private boolean isExtensionInCategory(String extension, String group) {
         JsonArray extensionsArray = extensionCategories.getAsJsonArray(group);
-        // Convert the extension to a JsonElement
+        if (extensionsArray == null) {
+            return false;
+        }
         JsonPrimitive extensionElement = new JsonPrimitive(extension);
         return extensionsArray.contains(extensionElement);
     }
