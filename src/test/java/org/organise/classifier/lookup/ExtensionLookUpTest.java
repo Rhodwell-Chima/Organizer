@@ -1,6 +1,7 @@
 package org.organise.classifier.lookup;
 
 import org.junit.jupiter.api.Test;
+import org.organise.configuration.ConfigurationLoader;
 
 import java.nio.file.Path;
 
@@ -10,7 +11,11 @@ class ExtensionLookUpTest {
 
     @Test
     void getExtensionCategory() {
-        ExtensionLookUp extensionLookUp = new ExtensionLookUp(Path.of("/home/rega/Tutorial/config/Config.json"));
+        Path configurationPath = Path.of("/home/rega/Tutorial/config/Config.json");
+        ConfigurationLoader configurationLoader = ConfigurationLoader.getInstance(configurationPath);
+        ExtensionLookUp extensionLookUp = new ExtensionLookUp(
+                configurationLoader.getJsonConfigurationObject()
+        );
         String actual = extensionLookUp.getExtensionCategory(".mp3");
         assertEquals("Audio", actual);
     }
