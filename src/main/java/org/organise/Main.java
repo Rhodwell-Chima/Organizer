@@ -8,8 +8,6 @@ import org.organise.mover.FileMover;
 import org.organise.organiser.FileOrganiser;
 import org.organise.scanner.DirectoryScanner;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -32,7 +30,6 @@ public class Main {
         FileMover fileMover = new FileMover();
 
         DirectoryScanner directoryScanner = new DirectoryScanner(sourcePath);
-        List<Path> pathList = directoryScanner.scan();
 
         FileOrganiser fileOrganiser = new FileOrganiser(
                 classifyByFileExtension,
