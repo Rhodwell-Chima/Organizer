@@ -13,6 +13,7 @@ public class FileOrganiser {
     private final ClassifyFile<String> classifyFile;
     private final Mover mover;
     private final Scanner<List<Path>> scanner;
+    private int depth = 1;
 
 
     public FileOrganiser(ClassifyFile<String> classifyFile, Mover mover, Scanner<List<Path>> scanner) {
@@ -32,7 +33,7 @@ public class FileOrganiser {
     }
 
     private List<Path> getPathList() {
-        return scanner.scan();
+        return depth == 1 ? scanner.scan() : scanner.scan(depth);
     }
 
     private void moveFile(Path path, Path categorisedDirectory) {
@@ -46,5 +47,13 @@ public class FileOrganiser {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 }
