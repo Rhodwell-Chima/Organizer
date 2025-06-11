@@ -1,4 +1,3 @@
-// File: src/test/java/org/organise/mover/FileMoverTest.java
 package org.organise.mover;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -6,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -46,9 +45,7 @@ class FileMoverTest {
         FileMover mover = new FileMover();
 
         // Act & Assert: Expect an IllegalArgumentException.
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            mover.move(sourceDirectory, destinationDirectory);
-        });
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> mover.move(sourceDirectory, destinationDirectory));
         assertTrue(ex.getMessage().contains("Source File must be a regular file"),
                 "Exception should mention invalid source file");
     }
@@ -65,9 +62,7 @@ class FileMoverTest {
         FileMover mover = new FileMover();
 
         // Act & Assert: Expect an IllegalArgumentException.
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            mover.move(sourceFile, destinationFile);
-        });
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> mover.move(sourceFile, destinationFile));
         assertTrue(ex.getMessage().contains("Destination Directory must be a Directory"),
                 "Exception should mention invalid destination directory");
     }
