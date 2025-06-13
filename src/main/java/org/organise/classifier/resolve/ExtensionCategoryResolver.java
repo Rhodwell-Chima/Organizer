@@ -1,17 +1,22 @@
-package org.organise.classifier.lookup;
+package org.organise.classifier.resolve;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-public class ExtensionLookUp {
+public class ExtensionCategoryResolver implements CategoryResolver {
     private final JsonObject extensionCategories;
 
-    public ExtensionLookUp(JsonObject extensionCategories) {
+    public ExtensionCategoryResolver(JsonObject extensionCategories) {
         if (extensionCategories == null) {
             throw new IllegalArgumentException("Extension categories cannot be null");
         }
         this.extensionCategories = extensionCategories;
+    }
+
+    @Override
+    public String lookup(String input) {
+        return getExtensionCategory(input);
     }
 
     public String getExtensionCategory(String extension) {
