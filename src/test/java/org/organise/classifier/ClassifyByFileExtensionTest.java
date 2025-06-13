@@ -1,7 +1,7 @@
 package org.organise.classifier;
 
 import org.junit.jupiter.api.Test;
-import org.organise.classifier.lookup.ExtensionLookUp;
+import org.organise.classifier.resolve.ExtensionCategoryResolver;
 import org.organise.configuration.JSONConfigurationLoader;
 import org.organise.extractor.FileExtensionExtractor;
 
@@ -17,7 +17,7 @@ class ClassifyByFileExtensionTest {
         Path configurationFilePath = Path.of("/home/rega/Tutorial/config/Config.json");
         JSONConfigurationLoader jsonConfigurationLoader = JSONConfigurationLoader.getInstance(configurationFilePath);
         ClassifyByFileExtension classify = new ClassifyByFileExtension(
-                new ExtensionLookUp(jsonConfigurationLoader.getJsonConfigurationObject()),
+                new ExtensionCategoryResolver(jsonConfigurationLoader.getJsonConfigurationObject()),
                 new FileExtensionExtractor()
         );
         String actual = classify.classify(filePath);

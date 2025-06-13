@@ -1,23 +1,23 @@
 package org.organise.classifier;
 
-import org.organise.classifier.lookup.ExtensionLookUp;
+import org.organise.classifier.resolve.ExtensionCategoryResolver;
 import org.organise.extractor.FileExtensionExtractor;
 
 import java.nio.file.Path;
 
 public class ClassifyByFileExtension implements ClassifyFile<String> {
 
-    private final ExtensionLookUp extensionLookUp;
+    private final ExtensionCategoryResolver extensionCategoryResolver;
     private final FileExtensionExtractor fileExtensionExtractor;
 
     public ClassifyByFileExtension(
-            ExtensionLookUp extensionLookUp,
+            ExtensionCategoryResolver extensionCategoryResolver,
             FileExtensionExtractor fileExtensionExtractor
     ) {
-        if (extensionLookUp == null || fileExtensionExtractor == null) {
+        if (extensionCategoryResolver == null || fileExtensionExtractor == null) {
             throw new IllegalArgumentException("Dependencies cannot be null");
         }
-        this.extensionLookUp = extensionLookUp;
+        this.extensionCategoryResolver = extensionCategoryResolver;
         this.fileExtensionExtractor = fileExtensionExtractor;
     }
 
@@ -31,6 +31,6 @@ public class ClassifyByFileExtension implements ClassifyFile<String> {
 
     private String categorizeFileByExtension(Path file) {
         String extractedFileExtension = "." + fileExtensionExtractor.extract(file);
-        return extensionLookUp.getExtensionCategory(extractedFileExtension);
+        return extensionCategoryResolver.lookup(extractedFileExtension);
     }
 }
