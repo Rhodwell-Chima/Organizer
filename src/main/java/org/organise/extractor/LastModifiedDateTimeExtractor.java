@@ -10,6 +10,7 @@ import java.time.ZoneId;
 public class LastModifiedDateTimeExtractor implements DataExtractor<LocalDateTime> {
     @Override
     public LocalDateTime extract(Path file) {
+        this.validateFile(file);
         try {
             return getLastModifiedDateTime(file);
         } catch (IOException e) {
@@ -20,5 +21,14 @@ public class LastModifiedDateTimeExtractor implements DataExtractor<LocalDateTim
     private LocalDateTime getLastModifiedDateTime(Path file) throws IOException {
         BasicFileAttributes basicFileAttributes = Files.readAttributes(file, BasicFileAttributes.class);
         return LocalDateTime.ofInstant(basicFileAttributes.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+    }
+
+    private void validateFile(Path file) {
+        if (file == null || file.getFileName() == null) {
+            throw new IllegalArgumentException("File path cannot be null or empty.");
+        }
+        if (!Files.isReadable(file)) {
+            throw new IllegalArgumentException("File is not readable: " + file);
+        }
     }
 }

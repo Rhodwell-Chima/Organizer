@@ -10,6 +10,7 @@ import java.time.ZoneId;
 public class CreationDateExtractor implements DataExtractor<LocalDateTime> {
     @Override
     public LocalDateTime extract(Path file) {
+        this.validateFile(file);
         try {
             return getCreationDate(file);
         } catch (IOException e) {
@@ -20,5 +21,14 @@ public class CreationDateExtractor implements DataExtractor<LocalDateTime> {
     private LocalDateTime getCreationDate(Path file) throws IOException {
         BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
         return LocalDateTime.ofInstant(attributes.creationTime().toInstant(), ZoneId.systemDefault());
+    }
+
+    private void validateFile(Path file) {
+        if (file == null || file.getFileName() == null) {
+            throw new IllegalArgumentException("File path cannot be null or empty.");
+        }
+        if (!Files.isReadable(file)) {
+            throw new IllegalArgumentException("File is not readable: " + file);
+        }
     }
 }
