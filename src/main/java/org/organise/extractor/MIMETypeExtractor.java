@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileTypeExtractor implements DataExtractor<String> {
+public class MIMETypeExtractor implements DataExtractor<String> {
     private static final String UNKNOWN_TYPE = "Unknown Type";
 
     @Override
