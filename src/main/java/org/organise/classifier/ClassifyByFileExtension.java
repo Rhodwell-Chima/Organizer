@@ -30,7 +30,7 @@ public class ClassifyByFileExtension implements ClassifyFile<String> {
     }
 
     private String categorizeFileByExtension(Path file) {
-        String extractedFileExtension = "." + fileExtensionExtractor.extract(file);
+        String extractedFileExtension = fileExtensionExtractor.extract(file);
         return extensionCategoryResolver.lookup(extractedFileExtension);
     }
 }
