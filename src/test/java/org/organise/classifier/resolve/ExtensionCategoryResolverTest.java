@@ -2,6 +2,8 @@ package org.organise.classifier.resolve;
 
 import org.junit.jupiter.api.Test;
 import org.organise.configuration.JSONConfigurationLoader;
+import org.organise.configuration.extractor.ConfigurationExtractor;
+import org.organise.configuration.extractor.ExtensionConfigurationExtractor;
 
 import java.nio.file.Path;
 
@@ -11,12 +13,13 @@ class ExtensionCategoryResolverTest {
 
     @Test
     void getExtensionCategory() {
-        Path configurationPath = Path.of("/home/rega/Tutorial/config/Config.json");
+        Path configurationPath = Path.of("/home/rega/Tutorial/config/Configuration.json");
         JSONConfigurationLoader jsonConfigurationLoader = JSONConfigurationLoader.getInstance(configurationPath);
+        ConfigurationExtractor<String> configurationExtractor = new ExtensionConfigurationExtractor(jsonConfigurationLoader.getJsonConfigurationObject(), "Extension_Rules");
         ExtensionCategoryResolver extensionCategoryResolver = new ExtensionCategoryResolver(
-                jsonConfigurationLoader.getJsonConfigurationObject()
+                configurationExtractor.extract()
         );
-        String actual = extensionCategoryResolver.lookup(".mp3");
+        String actual = extensionCategoryResolver.lookup("mp3");
         assertEquals("Audio", actual);
     }
 }
