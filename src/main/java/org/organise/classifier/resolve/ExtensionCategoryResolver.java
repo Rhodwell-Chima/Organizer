@@ -4,10 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-public class ExtensionCategoryResolver implements CategoryResolver {
-    private final JsonObject extensionCategories;
+import java.util.List;
+import java.util.Map;
 
-    public ExtensionCategoryResolver(JsonObject extensionCategories) {
+public class ExtensionCategoryResolver implements CategoryResolver {
+    private final Map<String, List<String>> extensionCategories;
+
+    public ExtensionCategoryResolver(Map<String, List<String>> extensionCategories) {
         if (extensionCategories == null) {
             throw new IllegalArgumentException("Extension categories cannot be null");
         }
@@ -37,11 +40,7 @@ public class ExtensionCategoryResolver implements CategoryResolver {
     }
 
     private boolean isExtensionInCategory(String extension, String group) {
-        JsonArray extensionsArray = extensionCategories.getAsJsonArray(group);
-        if (extensionsArray == null) {
-            return false;
-        }
-        JsonPrimitive extensionElement = new JsonPrimitive(extension);
-        return extensionsArray.contains(extensionElement);
+        List<String> extensionsList = extensionCategories.get(group);
+        return extensionsList != null && extensionsList.contains(extension);
     }
 }
