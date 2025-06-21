@@ -1,7 +1,5 @@
 package org.organise.configuration.extractor;
 
-import com.google.gson.JsonElement;
-
 import java.util.List;
 import java.util.Map;
 
