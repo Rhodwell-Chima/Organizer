@@ -9,7 +9,7 @@ import java.util.Map;
 public class DateCategoryResolver implements CategoryResolver {
 
     private final Map<String, List<LocalDateTime>> dateCategoryJson;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public DateCategoryResolver(Map<String, List<LocalDateTime>> dateCategoryJson) {
         if (dateCategoryJson == null || dateCategoryJson.isEmpty()) {
