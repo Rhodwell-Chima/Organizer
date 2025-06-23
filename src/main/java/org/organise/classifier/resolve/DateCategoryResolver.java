@@ -16,12 +16,12 @@ public class DateCategoryResolver implements CategoryResolver {
         this(dateCategoryJson, "Unknown");
     }
 
-    public DateCategoryResolver(Map<String, List<LocalDateTime>> dateCategoryJson, String unknownCategoryPlaceHolder) {
+    public DateCategoryResolver(Map<String, List<LocalDateTime>> dateCategoryJson, String unknownCategoryPlaceholder) {
         if (dateCategoryJson == null || dateCategoryJson.isEmpty()) {
             throw new IllegalArgumentException("Map of date categories cannot be empty.");
         }
         this.dateCategoryJson = dateCategoryJson;
-        this.UNKNOWN_CATEGORY_PLACEHOLDER = unknownCategoryPlaceHolder;
+        this.UNKNOWN_CATEGORY_PLACEHOLDER = unknownCategoryPlaceholder;
     }
 
     @Override

@@ -5,12 +5,18 @@ import java.util.Map;
 
 public class ExtensionCategoryResolver implements CategoryResolver {
     private final Map<String, List<String>> extensionCategories;
+    private final String UNKNOWN_CATEGORY_PLACEHOLDER;
 
     public ExtensionCategoryResolver(Map<String, List<String>> extensionCategories) {
+        this(extensionCategories, "Unknown");
+    }
+
+    public ExtensionCategoryResolver(Map<String, List<String>> extensionCategories, String unknownCategoryPlaceholder) {
         if (extensionCategories == null) {
             throw new IllegalArgumentException("Extension categories cannot be null");
         }
         this.extensionCategories = extensionCategories;
+        this.UNKNOWN_CATEGORY_PLACEHOLDER = unknownCategoryPlaceholder;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class ExtensionCategoryResolver implements CategoryResolver {
                 throw new RuntimeException(e);
             }
         }
-        return "Unknown";
+        return UNKNOWN_CATEGORY_PLACEHOLDER;
     }
 
     private boolean isExtensionInCategory(String extension, String group) {
