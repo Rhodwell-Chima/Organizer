@@ -6,6 +6,7 @@ import org.organise.configuration.extractor.ConfigurationExtractor;
 import org.organise.configuration.extractor.ExtensionConfigurationExtractor;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class ExtensionCategoryResolverTest {
     void getExtensionCategory() {
         Path configurationPath = Path.of("/home/rega/Tutorial/config/Configuration.json");
         JSONConfigurationLoader jsonConfigurationLoader = JSONConfigurationLoader.getInstance(configurationPath);
-        ConfigurationExtractor<String> configurationExtractor = new ExtensionConfigurationExtractor(jsonConfigurationLoader.getJsonConfigurationObject(), "Extension_Rules");
+        ConfigurationExtractor<List<String>> configurationExtractor = new ExtensionConfigurationExtractor(jsonConfigurationLoader.getJsonConfigurationObject(), "Extension_Rules");
         ExtensionCategoryResolver extensionCategoryResolver = new ExtensionCategoryResolver(
                 configurationExtractor.extract()
         );

@@ -8,6 +8,7 @@ import org.organise.configuration.extractor.ExtensionConfigurationExtractor;
 import org.organise.extractor.FileExtensionExtractor;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +19,7 @@ class ClassifyByFileExtensionTest {
         Path filePath = Path.of("/home/rega/Downloads/carbon.png");
         Path configurationFilePath = Path.of("/home/rega/Tutorial/config/Configuration.json");
         JSONConfigurationLoader jsonConfigurationLoader = JSONConfigurationLoader.getInstance(configurationFilePath);
-        ConfigurationExtractor<String> configurationExtractor = new ExtensionConfigurationExtractor(jsonConfigurationLoader.getJsonConfigurationObject(), "Extension_Rules");
+        ConfigurationExtractor<List<String>> configurationExtractor = new ExtensionConfigurationExtractor(jsonConfigurationLoader.getJsonConfigurationObject(), "Extension_Rules");
         ClassifyByFileExtension classify = new ClassifyByFileExtension(
                 new ExtensionCategoryResolver(configurationExtractor.extract()),
                 new FileExtensionExtractor()

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class DateConfigurationExtractor implements ConfigurationExtractor<LocalDateTime> {
+public class DateConfigurationExtractor implements ConfigurationExtractor<List<LocalDateTime>> {
     private final JsonObject jsonObject;
     private final String OBJECT_KEY;
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;

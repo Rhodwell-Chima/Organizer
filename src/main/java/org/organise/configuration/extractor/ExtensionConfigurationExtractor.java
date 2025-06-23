@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 
 import java.util.*;
 
-public class ExtensionConfigurationExtractor implements ConfigurationExtractor<String> {
+public class ExtensionConfigurationExtractor implements ConfigurationExtractor<List<String>> {
     private final JsonObject jsonObject;
     private final String OBJECT_KEY;
 
