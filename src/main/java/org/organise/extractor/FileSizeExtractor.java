@@ -5,10 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
-public class FileSizeExtractor implements DataExtractor<Integer> {
+public class FileSizeExtractor implements DataExtractor<Long> {
 
     @Override
-    public Integer extract(Path file) {
+    public Long extract(Path file) {
         this.validateFile(file);
         try {
             return this.getFileSizeInBytes(file);
@@ -17,9 +17,9 @@ public class FileSizeExtractor implements DataExtractor<Integer> {
         }
     }
 
-    private Integer getFileSizeInBytes(Path file) throws IOException {
+    private Long getFileSizeInBytes(Path file) throws IOException {
         BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
-        return Math.toIntExact(attributes.size());
+        return attributes.size();
     }
 
     private void validateFile(Path file) {
