@@ -10,12 +10,18 @@ public class DateCategoryResolver implements CategoryResolver {
 
     private final Map<String, List<LocalDateTime>> dateCategoryJson;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private final String UNKNOWN_CATEGORY_PLACEHOLDER;
 
     public DateCategoryResolver(Map<String, List<LocalDateTime>> dateCategoryJson) {
+        this(dateCategoryJson, "Unknown");
+    }
+
+    public DateCategoryResolver(Map<String, List<LocalDateTime>> dateCategoryJson, String unknownCategoryPlaceHolder) {
         if (dateCategoryJson == null || dateCategoryJson.isEmpty()) {
             throw new IllegalArgumentException("Map of date categories cannot be empty.");
         }
         this.dateCategoryJson = dateCategoryJson;
+        this.UNKNOWN_CATEGORY_PLACEHOLDER = unknownCategoryPlaceHolder;
     }
 
     @Override
@@ -33,7 +39,7 @@ public class DateCategoryResolver implements CategoryResolver {
                 return entry.getKey();
             }
         }
-        return "Unknown";
+        return UNKNOWN_CATEGORY_PLACEHOLDER;
     }
 
     private LocalDateTime convertStringToDateTime(String dateTime) {
