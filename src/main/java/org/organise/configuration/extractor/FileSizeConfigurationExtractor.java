@@ -5,10 +5,13 @@ import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileSizeConfigurationExtractor implements ConfigurationExtractor<Long> {
     private final JsonObject jsonObject;
     private final String OBJECT_KEY;
+    private static final Pattern SIZE_PATTERN = Pattern.compile("([0-9]*\\.?[0-9]+)\\s*(kb|mb|gb)?", Pattern.CASE_INSENSITIVE);
 
     public FileSizeConfigurationExtractor(JsonObject jsonObject, String objectKey) {
         if (jsonObject == null) {
@@ -24,14 +27,14 @@ public class FileSizeConfigurationExtractor implements ConfigurationExtractor<Lo
     }
 
     private Map<String, Long> parseSizeRules(Map<String, JsonElement> jsonMap) {
-        Map<String, Long> stringLongHashMap = new HashMap<>();
+        Map<String, Long> sizeMap = new HashMap<>();
         for (Map.Entry<String, JsonElement> entry : jsonMap.entrySet()) {
             String size = entry.getValue().getAsString();
             if (size == null || size.isEmpty())
                 throw new IllegalStateException("The value of size cannot be null or empty");
-            stringLongHashMap.put(entry.getKey(), convertStringToLong(size));
+            sizeMap.put(entry.getKey(), convertStringToLong(size));
         }
-        return stringLongHashMap;
+        return sizeMap;
     }
 
     private JsonObject getJsonObject() {
@@ -44,55 +47,23 @@ public class FileSizeConfigurationExtractor implements ConfigurationExtractor<Lo
     }
 
     public Long convertStringToLong(String input) {
-        long fileSizeInBytes;
-        if (isNumeric(input)) {
-            fileSizeInBytes = (long) (Double.parseDouble(input));
-        } else if (input.toLowerCase().endsWith("kb")) {
-            String newString = input.replaceAll("(?i)kb", "");
-            try {
-                fileSizeInBytes = kilobyteToByte(Double.parseDouble(newString));
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (input.toLowerCase().endsWith("mb")) {
-            String newString = input.replaceAll("(?i)mb", "");
-            try {
-                fileSizeInBytes = megabyteToByte(Double.parseDouble(newString));
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (input.toLowerCase().endsWith("gb")) {
-            String newString = input.replaceAll("(?i)gb", "");
-            try {
-                fileSizeInBytes = gigabyteToByte(Double.parseDouble(newString));
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input cannot be null or empty");
+        }
+        Matcher matcher = SIZE_PATTERN.matcher(input.trim());
+        if (!matcher.matches()) {
             throw new RuntimeException("The given string cannot be parsed.");
         }
-        return fileSizeInBytes;
-    }
 
+        double number = Double.parseDouble(matcher.group(1));
+        String unit = matcher.group(2) == null ? "" : matcher.group(2).toLowerCase();
 
-    private Long gigabyteToByte(double gigabytes) {
-        return (long) (gigabytes * 1024 * 1024 * 1024);
-    }
-
-    private Long megabyteToByte(double megabytes) {
-        return (long) (megabytes * 1024 * 1024);
-    }
-
-    private Long kilobyteToByte(double megabytes) {
-        return (long) (megabytes * 1024);
-    }
-
-    private boolean isNumeric(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        return switch (unit) {
+            case "" -> (long) number;
+            case "kb" -> (long) (number * 1024);
+            case "mb" -> (long) (number * 1024 * 1024);
+            case "gb" -> (long) (number * 1024 * 1024 * 1024);
+            default -> throw new RuntimeException("No conversion available for unit: " + unit);
+        };
     }
 }
