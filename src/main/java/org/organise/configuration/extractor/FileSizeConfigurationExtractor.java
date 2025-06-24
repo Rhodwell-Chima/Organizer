@@ -20,18 +20,18 @@ public class FileSizeConfigurationExtractor implements ConfigurationExtractor<Lo
 
     @Override
     public Map<String, Long> extract() {
-        return Map.of();
+        return parseSizeRules(getJsonObject().asMap());
     }
 
     private Map<String, Long> parseSizeRules(Map<String, JsonElement> jsonMap) {
-        Map<String, Long> dateRules = new HashMap<>();
+        Map<String, Long> stringLongHashMap = new HashMap<>();
         for (Map.Entry<String, JsonElement> entry : jsonMap.entrySet()) {
-            String date = entry.getValue().getAsString();
-            if (date == null || date.isEmpty())
-                throw new IllegalStateException("The value of date cannot be null or empty");
-
+            String size = entry.getValue().getAsString();
+            if (size == null || size.isEmpty())
+                throw new IllegalStateException("The value of size cannot be null or empty");
+            stringLongHashMap.put(entry.getKey(), convertStringToLong(size));
         }
-        return dateRules;
+        return stringLongHashMap;
     }
 
     private JsonObject getJsonObject() {
@@ -43,4 +43,56 @@ public class FileSizeConfigurationExtractor implements ConfigurationExtractor<Lo
         return jsonObject.getAsJsonObject(OBJECT_KEY);
     }
 
+    public Long convertStringToLong(String input) {
+        long fileSizeInBytes;
+        if (isNumeric(input)) {
+            fileSizeInBytes = (long) (Double.parseDouble(input));
+        } else if (input.toLowerCase().endsWith("kb")) {
+            String newString = input.replaceAll("(?i)kb", "");
+            try {
+                fileSizeInBytes = kilobyteToByte(Double.parseDouble(newString));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (input.toLowerCase().endsWith("mb")) {
+            String newString = input.replaceAll("(?i)mb", "");
+            try {
+                fileSizeInBytes = megabyteToByte(Double.parseDouble(newString));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (input.toLowerCase().endsWith("gb")) {
+            String newString = input.replaceAll("(?i)gb", "");
+            try {
+                fileSizeInBytes = gigabyteToByte(Double.parseDouble(newString));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            throw new RuntimeException("The given string cannot be parsed.");
+        }
+        return fileSizeInBytes;
+    }
+
+
+    private Long gigabyteToByte(double gigabytes) {
+        return (long) (gigabytes * 1024 * 1024 * 1024);
+    }
+
+    private Long megabyteToByte(double megabytes) {
+        return (long) (megabytes * 1024 * 1024);
+    }
+
+    private Long kilobyteToByte(double megabytes) {
+        return (long) (megabytes * 1024);
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
