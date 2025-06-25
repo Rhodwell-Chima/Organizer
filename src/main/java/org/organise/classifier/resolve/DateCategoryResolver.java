@@ -1,4 +1,3 @@
-// Language: java
 package org.organise.classifier.resolve;
 
 import java.time.LocalDateTime;
