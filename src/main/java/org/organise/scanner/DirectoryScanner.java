@@ -67,6 +67,6 @@ public class DirectoryScanner implements Scanner<List<Path>> {
     }
 
     public int getDepth() {
-        return this.calculateMaxDepth();
+        return this.calculateMaxDepth() + 1;
     }
 }
